@@ -1,0 +1,23 @@
+name: Auto-Zip Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Zip the Texture Pack
+
+        run: zip -r TexturePack.zip . -x "*.git*" -x "*.github*"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: TexturePack.zip
