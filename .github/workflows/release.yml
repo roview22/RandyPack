@@ -15,9 +15,9 @@ jobs:
 
       - name: Zip the Texture Pack
 
-        run: zip -r TexturePack.zip . -x "*.git*" -x "*.github*"
+        run: zip -r RandyPack.zip . -x "*.git*" -x "*.github*"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: TexturePack.zip
+          files: RandyPack.zip
