@@ -28,7 +28,7 @@ jobs:
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/RandyPack-${{ github.ref_name }}.zip"
           cat <<EOF > server.properties.snippet.txt
-          require-resource-pack=false
+          require-resource-pack=true
           resource-pack=$URL
           resource-pack-id=${{ steps.generate.outputs.uuid }}
           resource-pack-prompt={"text":"Please accept the server resource pack to see custom items!"}
