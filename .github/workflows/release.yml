@@ -16,7 +16,28 @@ jobs:
       - name: Zip the Texture Pack
         run: zip -r RandyPack-${{ github.ref_name }}.zip . -x "*.git*" -x "*.github*"
 
+      - name: Generate Hash and UUID
+        id: generate
+        run: |
+          HASH=$(sha1sum RandyPack-${{ github.ref_name }}.zip | awk '{print $1}')
+          UUID=$(uuidgen)
+          echo "sha1=$HASH" >> $GITHUB_OUTPUT
+          echo "uuid=$UUID" >> $GITHUB_OUTPUT
+
+      - name: Create server.properties snippet
+        run: |
+          URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/RandyPack-${{ github.ref_name }}.zip"
+          cat <<EOF > server.properties.snippet.txt
+          require-resource-pack=false
+          resource-pack=$URL
+          resource-pack-id=${{ steps.generate.outputs.uuid }}
+          resource-pack-prompt={"text":"Please accept the server resource pack to see custom items!"}
+          resource-pack-sha1=${{ steps.generate.outputs.sha1 }}
+          EOF
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: RandyPack-${{ github.ref_name }}.zip
+          files: |
+            RandyPack-${{ github.ref_name }}.zip
+            server.properties.snippet.txt
